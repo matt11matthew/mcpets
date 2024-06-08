@@ -57,7 +57,7 @@ public class MCPetsCommand implements CCommand {
                     new ArgumentSignalStick(sender, args),
                     new ArgumentSpawn(sender, args),
                     new ArgumentEditor(sender, args),
-                    new ArgumentDeSpawn(sender, args),
+//                    new ArgumentDeSpawn(sender, args),
             };
 
             for(AArgument argument : outcomes)
