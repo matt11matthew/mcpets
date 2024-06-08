@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.HashSet;
 import java.util.UUID;
 
 public class DatabaseRefreshListener implements Listener {
@@ -47,6 +48,19 @@ public class DatabaseRefreshListener implements Listener {
     }
      */
 
+    public static HashSet<UUID> locked = new HashSet<>();
+
+    public static void lock(UUID uuid) {
+        locked.add(uuid); //lock data
+    }
+    public static void unlock(UUID uuid) {
+        locked.remove(uuid); //Unlock data
+    }
+
+    public static boolean isLocked(UUID uuid) {
+        return locked.contains(uuid);//Check if player is locked
+    }
+
     @EventHandler
     public void saveDB(PetLevelUpEvent e)
     {
@@ -62,6 +76,7 @@ public class DatabaseRefreshListener implements Listener {
     @EventHandler
     public void saveDB(PlayerQuitEvent e)
     {
+        if (isLocked(e.getPlayer().getUniqueId()))return;
         if(GlobalConfig.getInstance().isDatabaseSupport()) {
             UUID owner = e.getPlayer().getUniqueId();
             if(PlayerData.isRegistered(owner))
