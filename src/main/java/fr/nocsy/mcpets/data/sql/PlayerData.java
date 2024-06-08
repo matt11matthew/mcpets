@@ -25,7 +25,7 @@ public class PlayerData {
     private ConcurrentHashMap<String, String> mapOfRegisteredPetStats = new ConcurrentHashMap<>();
 
     @Setter
-    @Getter
+    @Getter 
     private UUID uuid;
 
     private PlayerData(UUID uuid) {
