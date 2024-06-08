@@ -1,8 +1,10 @@
 package fr.nocsy.mcpets.commands.mcpets;
 
 import fr.nocsy.mcpets.PPermission;
+import fr.nocsy.mcpets.api.MCPetsAPI;
 import fr.nocsy.mcpets.commands.AArgument;
 import fr.nocsy.mcpets.data.Pet;
+import fr.nocsy.mcpets.data.PetDespawnReason;
 import fr.nocsy.mcpets.data.config.FormatArg;
 import fr.nocsy.mcpets.data.config.Language;
 import org.bukkit.Bukkit;
