@@ -181,8 +181,10 @@ public class Databases {
             }
         }
     }
-
     public static void savePlayerData(UUID playerUUID) {
+        savePlayerData(playerUUID, () -> {});
+    }
+    public static void savePlayerData(UUID playerUUID, Runnable onDone) {
         if (!GlobalConfig.getInstance().isDatabaseSupport())
             return;
         if(!PlayerData.isRegistered(playerUUID))
@@ -210,6 +212,7 @@ public class Databases {
                     + "', '" + names
                     + "', '" + inventories
                     + "', '" + data + "')");
+            Bukkit.getScheduler().runTaskLater(MCPets.getInstance(),onDone, 10L);
         }
     }
 
