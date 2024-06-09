@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class PetSkin {
 
-    private static HashMap<String, ArrayList<PetSkin>> petSkins = new HashMap<>();
+    public static HashMap<String, ArrayList<PetSkin>> petSkins = new HashMap<>();
 
     @Getter
     private String uuid;
