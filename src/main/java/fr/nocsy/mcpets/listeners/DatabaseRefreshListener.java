@@ -1,5 +1,6 @@
 package fr.nocsy.mcpets.listeners;
 
+import fr.nocsy.mcpets.commands.mcpets.ArgumentSpawn;
 import fr.nocsy.mcpets.data.config.GlobalConfig;
 import fr.nocsy.mcpets.data.sql.Databases;
 import fr.nocsy.mcpets.data.sql.PlayerData;
@@ -17,6 +18,7 @@ public class DatabaseRefreshListener implements Listener {
     @EventHandler
     public void refresh_DB_onjoin(PlayerJoinEvent e)
     {
+        ArgumentSpawn.join(e.getPlayer());
         // We only do that in the case of the Database support
         if(GlobalConfig.getInstance().isDatabaseSupport())
         {
@@ -72,6 +74,7 @@ public class DatabaseRefreshListener implements Listener {
             }
         }
     }
+
 
     @EventHandler
     public void saveDB(PlayerQuitEvent e)
