@@ -54,7 +54,7 @@ public class ArgumentSpawn extends AArgument {
             return;
         }
         if (loginTime.containsKey(target.getUniqueId())) {
-            if (System.currentTimeMillis()>loginTime.get(target.getUniqueId())){
+            if (System.currentTimeMillis()<loginTime.get(target.getUniqueId())){
                 target.sendMessage(ChatColor.RED+"Data still loading...");
                 return;
             } else {
