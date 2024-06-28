@@ -205,14 +205,15 @@ public class Databases {
                 data = new StringBuilder(data.substring(0, data.length() - 3));
 
             // First, delete the existing data for the player
-            getMySQL().query("DELETE FROM " + table + " WHERE uuid='" + playerUUID.toString() + "'");
+// Update the existing data for the player
+            getMySQL().query("UPDATE " + table + " SET "
+                    + "names = '" + names + "', "
+                    + "inventories = '" + inventories + "', "
+                    + "data = '" + data + "' "
+                    + "WHERE uuid = '" + playerUUID.toString() + "'");
 
-            // Then, insert the new data for the player
-            getMySQL().query("INSERT INTO " + table + " (uuid, names, inventories, data) VALUES ('" + playerUUID.toString()
-                    + "', '" + names
-                    + "', '" + inventories
-                    + "', '" + data + "')");
-            Bukkit.getScheduler().runTaskLater(MCPets.getInstance(),onDone, 10L);
+            onDone.run();
+//            Bukkit.getScheduler().runTaskLater(MCPets.getInstance(),onDone, 10L);
         }
     }
 
