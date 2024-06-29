@@ -80,6 +80,17 @@ public class PlayerData {
             PlayerDataNoDatabase.getCacheMap().values().forEach(PlayerDataNoDatabase::save);
         }
     }
+    public static void saveDB(UUID player) {
+        if(GlobalConfig.getInstance().isDatabaseSupport())
+            Databases.saveData();
+        else
+        {
+            if (PlayerDataNoDatabase.getCacheMap().containsKey(player)){
+                PlayerDataNoDatabase.getCacheMap().get(player).save();
+            }
+//            PlayerDataNoDatabase.getCacheMap().values().forEach(PlayerDataNoDatabase::save);
+        }
+    }
 
     public static void reloadAllPlayerData() {
         Databases.loadData();
