@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -157,7 +158,6 @@ public class Databases {
         if (!GlobalConfig.getInstance().isDatabaseSupport())
             return;
 
-        getMySQL().query("TRUNCATE " + table);
 
         for (UUID uuid : PlayerData.getRegisteredData().keySet()) {
             synchronized (getLockForPlayer(uuid)) {
@@ -166,21 +166,59 @@ public class Databases {
                 String names = buildStringSerialized(pd.getMapOfRegisteredNames());
                 String inventories = buildStringSerialized(pd.getMapOfRegisteredInventories());
 
-                StringBuilder data = new StringBuilder();
-
-                for (PetStats stats : PetStats.getPetStats(uuid)) {
-                    data.append(stats.serialize()).append(";;;");
+                StringBuilder petStatsData = new StringBuilder();
+                List<PetStats> petStatsList = PetStats.getPetStats(uuid);
+                for (PetStats stats : petStatsList) {
+                    petStatsData.append(stats.serialize()).append(";;;");
                 }
-                if (data.length() > 0)
-                    data = new StringBuilder(data.substring(0, data.length() - 3));
+                if (petStatsData.length() > 0) {
+                    petStatsData.setLength(petStatsData.length() - 3); // Remove the last ";;;"
+                }
 
-                getMySQL().query("INSERT INTO " + table + " (uuid, names, inventories, data) VALUES ('" + uuid.toString()
-                        + "', '" + names
-                        + "', '" + inventories
-                        + "', '" + data + "')");
+                // Check if the record exists
+                boolean recordExists =  getMySQL().queryExists("SELECT uuid FROM " + table + " WHERE uuid='" + uuid.toString() + "'");
+
+                if (recordExists) {
+                    // Update the existing record
+                    String updateQuery = "UPDATE " + table + " SET names='" + names + "', inventories='" + inventories + "', data='" + petStatsData.toString() + "' WHERE uuid='" + uuid.toString() + "'";
+                    getMySQL().query(updateQuery);
+                } else {
+                    // Insert new record if it doesn't exist
+                    String insertQuery = "INSERT INTO " + table + " (uuid, names, inventories, data) VALUES ('"
+                            + uuid.toString() + "', '" + names + "', '" + inventories + "', '" + petStatsData.toString() + "')";
+                    getMySQL().query(insertQuery);
+                }
             }
         }
     }
+//    public static void saveData() {
+//        if (!GlobalConfig.getInstance().isDatabaseSupport())
+//            return;
+//
+//        getMySQL().query("TRUNCATE " + table);
+//
+//        for (UUID uuid : PlayerData.getRegisteredData().keySet()) {
+//            synchronized (getLockForPlayer(uuid)) {
+//                PlayerData pd = PlayerData.getRegisteredData().get(uuid);
+//
+//                String names = buildStringSerialized(pd.getMapOfRegisteredNames());
+//                String inventories = buildStringSerialized(pd.getMapOfRegisteredInventories());
+//
+//                StringBuilder data = new StringBuilder();
+//
+//                for (PetStats stats : PetStats.getPetStats(uuid)) {
+//                    data.append(stats.serialize()).append(";;;");
+//                }
+//                if (data.length() > 0)
+//                    data = new StringBuilder(data.substring(0, data.length() - 3));
+//
+//                getMySQL().query("INSERT INTO " + table + " (uuid, names, inventories, data) VALUES ('" + uuid.toString()
+//                        + "', '" + names
+//                        + "', '" + inventories
+//                        + "', '" + data + "')");
+//            }
+//        }
+//    }
     public static void savePlayerData(UUID playerUUID) {
         savePlayerData(playerUUID, () -> {});
     }

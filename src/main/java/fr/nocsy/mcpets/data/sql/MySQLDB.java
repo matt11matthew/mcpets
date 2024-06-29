@@ -89,7 +89,34 @@ public class MySQLDB {
         }
         return set;
     }
+    public boolean queryExists(String query) {
+        if (!GlobalConfig.getInstance().isDatabaseSupport())
+            return false;
 
+        boolean exists = false;
+        ResultSet resultSet = null;
+        try {
+            if (!this.sqlCon.isValid(2)) {
+                this.sqlCon.close();
+                this.init(); // Assuming this method re-initializes the database connection
+            }
+
+            Statement statement = this.sqlCon.createStatement();
+            resultSet = statement.executeQuery(query);
+            exists = resultSet.next(); // Check if there is at least one result
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return exists;
+    }
     private void closeStat(final Statement stat) {
         if (!GlobalConfig.getInstance().isDatabaseSupport())
             return;
@@ -106,4 +133,6 @@ public class MySQLDB {
         }.runTaskLater(MCPets.getInstance(), 5L);
 
     }
+
+
 }
