@@ -91,12 +91,12 @@
             <version>2.8.6</version>
         </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version> <!-- Replace with the version you are using -->
-        </dependency>
-        <!-- Minecraft dependencies -->
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <version>8.0.28</version> &lt;!&ndash; Replace with the version you are using &ndash;&gt;-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; Minecraft dependencies &ndash;&gt;-->
 
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -148,11 +148,12 @@
             <artifactId>ModelEngine</artifactId>
             <version>R4.0.3</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.zaxxer</groupId>-->
-<!--            <artifactId>HikariCP</artifactId>-->
-<!--            <version>5.0.0</version> &lt;!&ndash; Replace with the latest version &ndash;&gt;-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <scope>compile</scope>
+            <version>5.0.0</version> <!-- Replace with the latest version -->
+        </dependency>
 
     </dependencies>
 </project>

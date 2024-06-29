@@ -1,8 +1,9 @@
 package fr.nocsy.mcpets.data.sql;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import fr.nocsy.mcpets.MCPets;
 import fr.nocsy.mcpets.data.config.GlobalConfig;
+import io.lumine.mythic.bukkit.utils.storage.sql.hikari.HikariConfig;
+import io.lumine.mythic.bukkit.utils.storage.sql.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
@@ -42,20 +43,22 @@ public class MySQLDB {
             Class.forName("com.mysql.jdbc.Driver");
             String url = urlBuilder();
 
-            MysqlDataSource mysqlDataSource = new MysqlDataSource();
-            mysqlDataSource.setURL(url);
-            mysqlDataSource.setUser(user);
-            mysqlDataSource.setPassword(pass);
 
-            // Set additional properties if needed
-//            mysqlDataSource.setCachePreparedStatements(true);
-            mysqlDataSource.setPrepStmtCacheSize(250);
-            mysqlDataSource.setPrepStmtCacheSqlLimit(2048);
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(url);
+            config.setUsername(user);
+            config.setPassword(pass);
 
-//            dataSource = mysqlDataSource;
+            // Configuring HikariCP specific settings
+            config.setMinimumIdle(5);  // Minimum number of idle connections in the pool
+            config.setMaximumPoolSize(20);  // Maximum number of connections in the pool
+            config.setConnectionTimeout(30000); // 30 seconds
 
-//            this.sqlCon = DriverManager.getConnection(url, this.user, this.pass);
-            this.sqlCon = mysqlDataSource.getConnection();
+            HikariDataSource  dataSource = new HikariDataSource(config);
+
+
+
+            this.sqlCon = dataSource.getConnection();
 
         } catch (Exception e) {
             MCPets.getInstance().getLogger().severe("Could not reach SQL database. Please configure your database parameters.");
